@@ -1,0 +1,22 @@
+很多做数据质量的人，其实就想快速把一些一次性的数据迁移中的数据质量做检测，在特殊场景下，属于第一阶段数据理解上可以帮助快速落地和给没有数据处理能力的分析人员做一些数据质量的分析结果，但是要准确的挖掘数据规则达到B端数据的高度定制化和准确性是需要专家型的方法论来解决。
+现在市场上很多公司都有在做这块的探索，有的还利用LLM尝试解决B端业务的数据质量/数据治理的问题，其实我理解企业更需要的是Industry Model或者现在叫的小模型来处理B端数据，如何把行业专家的industry model转换成生产力通过NLP来快速对接分析员或者Data Steward才是B端的做法（不通用），C端那种玩法（通用模型）本质上是用不起来。因为B端要求的100%不是99.999%，同业企业的Enforce的东西也不多（除了金融，财务等板块），所以基本上小模型和自动化调整是合理的产品结构，
+回来说一下Google Gemini，也是和微软Choplit一样做聊天还有私有的模型，微软是用OpenAI来做模型。
+def check_data_quality(request):
+    from google.cloud import bigquery
+    from vertexai.preview.generative_models import GenerativeModel
+
+ 
+
+    client = bigquery.Client()
+    query = "SELECT * FROM factory_data"
+    df = client.query(query).to_dataframe()
+
+ 
+
+    model = GenerativeModel("gemini-1.5-pro")
+    response = model.predict(f"请对以下数据执行质量检测: {df.to_string()}")
+
+ 
+
+    # 结果存储到 BigQuery 或发送通知
+    print(response.text)
